@@ -3,7 +3,7 @@ import Stripe from "stripe";
 import { env } from "@/lib/env";
 
 export const stripe = new Stripe(env.STRIPE_SECRET_KEY, {
-  apiVersion: "2025-04-30.basil",
+  apiVersion: "2024-12-18.acacia",
   typescript: true,
   appInfo: {
     name: "Lyvee.link",
