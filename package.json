@@ -1,0 +1,49 @@
+{
+  "name": "lyvee-link",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "latest",
+    "@radix-ui/react-label": "latest",
+    "@radix-ui/react-slot": "latest",
+    "@radix-ui/react-switch": "latest",
+    "@supabase/ssr": "latest",
+    "@supabase/supabase-js": "latest",
+    "class-variance-authority": "latest",
+    "clsx": "latest",
+    "lucide-react": "latest",
+    "next": "15.0.0",
+    "qrcode": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "server-only": "latest",
+    "stripe": "latest",
+    "tailwind-merge": "latest",
+    "tailwindcss-animate": "latest",
+    "zod": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/qrcode": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "autoprefixer": "latest",
+    "eslint": "latest",
+    "eslint-config-next": "15.0.0",
+    "postcss": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest",
+    "vitest": "latest"
+  },
+  "packageManager": "pnpm@9.12.3"
+}
