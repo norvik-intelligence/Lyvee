@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   const supabase = createSupabaseServiceClient();
   const { data: product } = await supabase
     .from("products")
-    .select("*, sellers(stripe_account_id, stripe_onboarding_complete)")
+    .select("*")
     .eq("id", productId)
     .eq("is_active", true)
     .single();
@@ -24,12 +24,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Product not found" }, { status: 404 });
   }
 
+  const { data: seller } = await supabase
+    .from("sellers")
+    .select("stripe_account_id, stripe_onboarding_complete")
+    .eq("id", product.seller_id)
+    .single();
+
   if (product.stock !== null && product.stock <= 0) {
     return NextResponse.json({ error: "Sold out" }, { status: 409 });
   }
 
-  const stripeAccountId = product.sellers?.stripe_account_id;
-  if (!stripeAccountId || !product.sellers?.stripe_onboarding_complete) {
+  const stripeAccountId = seller?.stripe_account_id;
+  if (!stripeAccountId || !seller?.stripe_onboarding_complete) {
     return NextResponse.json({ error: "Seller has not completed Stripe onboarding" }, { status: 409 });
   }
 
