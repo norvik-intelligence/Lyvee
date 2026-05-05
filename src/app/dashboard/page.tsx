@@ -37,6 +37,24 @@ export default async function DashboardPage() {
           </Link>
         </header>
 
+        {!seller.stripe_onboarding_complete ? (
+          <div className="rounded-3xl border bg-white p-5 shadow-sm">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+              <div>
+                <h2 className="text-xl font-semibold">Zahlungen aktivieren</h2>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Verbinde dein Stripe-Konto, damit Käufer deine Links bezahlen können.
+                </p>
+              </div>
+              <form action="/api/stripe/connect" method="POST">
+                <button className="rounded-2xl bg-black px-5 py-3 font-semibold text-white shadow-lg">
+                  Stripe verbinden
+                </button>
+              </form>
+            </div>
+          </div>
+        ) : null}
+
         <div className="grid gap-4 sm:grid-cols-3">
           <div className="rounded-3xl border bg-white p-5 shadow-sm">
             <p className="text-sm text-muted-foreground">Gesamtumsatz</p>
