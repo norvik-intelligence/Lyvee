@@ -8,12 +8,18 @@ export default async function PublicProductPage({ params }: { params: Promise<{ 
 
   const { data: product } = await supabase
     .from("products")
-    .select("*, sellers(username, display_name, stripe_account_id, stripe_onboarding_complete)")
+    .select("*")
     .eq("slug", slug)
     .eq("is_active", true)
     .single();
 
   if (!product) notFound();
+
+  const { data: seller } = await supabase
+    .from("sellers")
+    .select("username, display_name, stripe_account_id, stripe_onboarding_complete")
+    .eq("id", product.seller_id)
+    .single();
 
   await supabase.from("product_events").insert({
     product_id: product.id,
@@ -38,7 +44,7 @@ export default async function PublicProductPage({ params }: { params: Promise<{ 
           <div className="space-y-5 p-6">
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">
-                {product.sellers?.display_name || product.sellers?.username || "Lyvee Seller"}
+                {seller?.display_name || seller?.username || "Lyvee Seller"}
               </p>
               <h1 className="text-3xl font-bold tracking-tight">{product.name}</h1>
               <p className="text-muted-foreground">{product.description}</p>
@@ -55,12 +61,18 @@ export default async function PublicProductPage({ params }: { params: Promise<{ 
               <span className="rounded-full bg-neutral-100 px-3 py-1 text-sm font-medium">Apple Pay · Google Pay</span>
             </div>
 
-            <form action="/api/checkout" method="POST">
-              <input type="hidden" name="productId" value={product.id} />
-              <button disabled={soldOut} className="w-full rounded-2xl bg-black py-4 text-base font-semibold text-white shadow-lg disabled:cursor-not-allowed disabled:bg-neutral-300">
-                {soldOut ? "Ausverkauft" : "Jetzt kaufen"}
-              </button>
-            </form>
+            {!seller?.stripe_onboarding_complete ? (
+              <div className="rounded-2xl bg-neutral-100 p-4 text-sm text-muted-foreground">
+                Checkout ist noch nicht aktiv. Der Verkäufer muss Stripe verbinden.
+              </div>
+            ) : (
+              <form action="/api/checkout" method="POST">
+                <input type="hidden" name="productId" value={product.id} />
+                <button disabled={soldOut} className="w-full rounded-2xl bg-black py-4 text-base font-semibold text-white shadow-lg disabled:cursor-not-allowed disabled:bg-neutral-300">
+                  {soldOut ? "Ausverkauft" : "Jetzt kaufen"}
+                </button>
+              </form>
+            )}
 
             <p className="text-center text-xs text-muted-foreground">
               Sicherer Checkout über Stripe. Widerruf auf der Bestätigungsseite möglich.
