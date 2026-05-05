@@ -4,9 +4,9 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { publicEnv } from "@/lib/env-public";
 
 export default function LoginPage() {
-  const supabase = createSupabaseBrowserClient();
-
   async function signIn(provider: "google" | "apple") {
+    const supabase = createSupabaseBrowserClient();
+
     await supabase.auth.signInWithOAuth({
       provider,
       options: {
